@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student List</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+</head>
+
+<body>
+    <h1>Students</h1>
+    <div class="button-group">
+        <button id="refresh-btn">Refresh Data</button>
+        <button id="create-btn" class="create-btn">Create New Student</button>
+    </div>
+    <table id="students-table" class="std_table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Middle Name</th>
+                <th>Birth Date</th>
+                <th>Sex</th>
+                <th>Passport Number</th>
+                <th>Nationality</th>
+                <th>Region</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Faculty</th>
+                <th>Kafedra</th>
+                <th>Group Name</th>
+                <th>Course</th>
+                <th>Study Year</th>
+                <th>Education Form</th>
+                <th>Enrollment Date</th>
+                <th>Graduation Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be inserted here by JavaScript -->
+        </tbody>
+    </table>
+    <div id="orders"
+        style="display: flex; flex-direction: column; justify-content: center; row-gap: 10px; margin-top: 20px;">
+    </div>
+    <div id="editModal" class="modal">
+        <div class="modal-content ">
+            <span class="close">&times;</span>
+            <h2>Edit Student</h2>
+            <form id="editForm">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label for="editFirstName">First Name</label>
+                    <input type="text" id="editFirstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editLastName">Last Name</label>
+                    <input type="text" id="editLastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editMiddleName">Middle Name</label>
+                    <input type="text" id="editMiddleName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editBirthDate">Birth Date</label>
+                    <input type="date" id="editBirthDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="editSex">Sex</label>
+                    <select id="editSex" required>
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editPassportNumber">Passport Number</label>
+                    <input type="text" id="editPassportNumber" required>
+                    <div id="editPassportNumber-error" class="error-message"></div>
+                </div>
+                <div class="form-group">
+                    <label for="editNationality">Nationality</label>
+                    <select id="editNationality" required>
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editRegion">Region</label>
+                    <select id="editRegion" required>
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editAddress">Address</label>
+                    <input type="text" id="editAddress" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPhoneNumber">Phone Number</label>
+                    <input type="text" id="editPhoneNumber" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">Email</label>
+                    <input type="email" id="editEmail" required>
+                    <div id="editEmail-error" class="error-message"></div>
+                </div>
+                <div class="form-group">
+                    <label for="editFaculty">Faculty</label>
+                    <select id="editFaculty" required>
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editKafedra">Kafedra</label>
+                    <select id="editKafedra" required>
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editGroupName">Group Name</label>
+                    <select id="editGroupName" required>
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editCourse">Course</label>
+                    <input type="number" id="editCourse" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="editStudyYear">Study Year</label>
+                    <input type="number" id="editStudyYear" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEducationForm">Education Form</label>
+                    <select id="editEducationForm" required>
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editEnrollmentDate">Enrollment Date</label>
+                    <input type="date" id="editEnrollmentDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="editGraduationDate">Graduation Date</label>
+                    <input type="date" id="editGraduationDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="editStatus">Status</label>
+                    <select id="editStatus" required>
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel">Cancel</button>
+                    <button type="submit" class="btn-save">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Modal -->
+    <div id="createModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 class="cr-h1">Create New Student</h2>
+            <form id="createForm">
+                <div class="form-group">
+                    <label for="createFirstName">First Name</label>
+                    <input type="text" id="createFirstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="createLastName">Last Name</label>
+                    <input type="text" id="createLastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="createMiddleName">Middle Name</label>
+                    <input type="text" id="createMiddleName" required>
+                </div>
+                <div class="form-group">
+                    <label for="createBirthDate">Birth Date</label>
+                    <input type="date" id="createBirthDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="createSex">Sex</label>
+                    <select id="createSex" required>
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="createPassportNumber">Passport Number</label>
+                    <input type="text" id="createPassportNumber" required>
+                    <div id="createPassportNumber-error" class="error-message"></div>
+                </div>
+                <div class="form-group">
+                    <label for="createNationality">Nationality</label>
+                    <select id="createNationality" required>
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="createRegion">Region</label>
+                    <select id="createRegion" required>
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="createAddress">Address</label>
+                    <input type="text" id="createAddress" required>
+                </div>
+                <div class="form-group">
+                    <label for="createPhoneNumber">Phone Number</label>
+                    <input type="text" id="createPhoneNumber" required>
+                </div>
+                <div class="form-group">
+                    <label for="createEmail">Email</label>
+                    <input type="email" id="createEmail" required>
+                    <div id="createEmail-error" class="error-message"></div>
+                </div>
+                <div class="form-group">
+                    <label for="createFaculty">Faculty</label>
+                    <select id="createFaculty" required>
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="createKafedra">Kafedra</label>
+                    <select id="createKafedra" required>
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="createGroupName">Group Name</label>
+                    <select id="createGroupName" required>
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="createCourse">Course</label>
+                    <input type="number" id="createCourse" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="createStudyYear">Study Year</label>
+                    <input type="number" id="createStudyYear" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="createEducationForm">Education Form</label>
+                    <select id="createEducationForm" required>
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="createEnrollmentDate">Enrollment Date</label>
+                    <input type="date" id="createEnrollmentDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="createGraduationDate">Graduation Date</label>
+                    <input type="date" id="createGraduationDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="createStatus">Status</label>
+                    <select id="createStatus" required>
+                        <option value="">-- Select --</option>
+                        <option value="Active">Active</option>
+                        <option value="Graduated">Graduated</option>
+                        <option value="Dropped">Dropped</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel">Cancel</button>
+                    <button type="submit" class="btn-save">Create Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Confirm Deletion</h2>
+            <p>Are you sure you want to delete this student?</p>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel">Cancel</button>
+                <button type="button" class="btn-confirm-delete">Delete</button>
+            </div>
+        </div>
+    </div>
+    <!-- Document Generation Modal -->
+    <div id="documentModal" class="modal_farmon">
+        <div class="modal-content">
+            <span class="close-farmon">&times;</span>
+            <img src="./image.png" width="120px" height="112px"
+                style="margin: 0px auto; display: block; border-radius: 50%;" alt="logo">
+
+            <form id="documentForm">
+                <h1 style="text-align: center;">
+                    ВАЗОРАТИ МАОРИФ ВА ИЛМИ ҶУМҲУРИИ ТОҶИКИСТОН<br>
+                    Донишгоҳи техникии Тоҷикистон ба номи академик М. С. Осими
+                </h1>
+                <h3 style="text-align: center;">ФАРМОИШ</h3>
+                <div style="display: flex; row-gap: 2px; justify-content: center;">
+                    Аз "<input required type="text" placeholder="руз" id="day"
+                        style="border: 0px 1px 0px 1px; outline: none;" />"
+                    -<input required type="text" placeholder="моҳ" id="month"
+                        style="border: 0px 1px 0px 1px; outline: none;" />"-соли 2025
+                    №-<input required type="text" style="border: 0px 1px 0px 1px; outline: none;" id="number"
+                        placeholder="Рақами фармон" />
+                    ш. Душанбе
+                </div>
+
+                <h1 style="text-align: center;"></h1>
+                <div style="display: flex; justify-content: center;">
+                    <input required style="width:500px;" type="text" value="Оид ба хориҷ намудани донишҷӯ"
+                        id="type_farmon">
+                </div>
+                <br>
+                <textarea rows="8" cols="135" style="padding: 10;" id="modda_type">
+                    Мутобиқи қисми 11 моддаи 21 Қонуни Ҷумҳурии Тоҷикистон «Дар бораи таҳсилоти олӣ ва таҳсилоти касбӣ
+                    баъд аз муассисаҳои таҳсилоти миёнаи умумӣ», банди 24 Тартиби хориҷ, барқарор ва интиқоли донишҷӯён
+                    байни муассисаҳои таҳсилоти олии касбии Ҷумҳурии Тоҷикистон ва банди 88 Оинномаи Донишгоҳи техникии
+                    Тоҷикистон ба номи академик М. С. Осимӣ
+                </textarea>
+                <h1 style="text-align: center;">ФАРМОИШ МЕДИХАМ:</h1>
+                <textarea rows="8" cols="135" style="padding: 10;" placeholder="Матни асосӣ" id="order_type">
+                    1. Донишҷӯи зерин аз шуъбаи рӯзонаи таҳсили буҷавии факултети технологияҳои рақамӣ, системаҳо ва
+                    ҳифзи иттилоот, бинобар сабаби набудани ҳозиршавии кофӣ аз нимсолаи дуюми соли таҳсили 2024–2025
+                    хориҷ карда шавад:
+                </textarea>
+                <table id="full_name_student">
+                    <thead>
+                        <tr>
+                            <td>Ному насаби домишчу</td>
+                            <td>Kypc</td>
+                            <td>Ихтисос</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="student_detals_create">
+                            <!-- here must get the clicked student for the table: full name, curse, group name,   -->
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="indent-first">
+                    Асос: гузориши декани факултет ва пешниҳоди муовини аввали ректор оид ба таълим.
+                </p>
+                <p>
+                    &Tab; 2. Назорати имроиши фармоноль мазкур ба зимман муовини аввал, муовини
+                    ректор онд ба тавлим Мачидзода Т.С. вогузор карда шавал.
+                </p>
+                <p style="display: flex; justify-content: space-between; width: 500px; margin: 0px auto;">
+                    <span>Ректор</span>
+                    <span>
+                        Давлатзода К.К.
+                    </span>
+                </p>
+                <p>Нусха дуруст аст</p>
+                <p style="display: flex; justify-content: space-between; width: 500px; margin: 0px auto;">
+                    <span>Cардори РК ва KM ___________</span>
+                    <span>
+                        Кодирзода Н.Ҳ
+                    </span>
+                </p>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel-farmon">Бекор кардан</button>
+                    <button type="submit" class="btn-save-farmon">Сабт кардан</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</body>
+<script src="./creat_edit_student.js"></script>
+<script src="./create_edit_order.js"></script>
+
+</html>
