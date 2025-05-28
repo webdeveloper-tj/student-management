@@ -61,6 +61,17 @@ button:hover {
     background-color: #dc3545;
 }
 
+.show-btn,
+#show_order {
+    background-color: #3572dc;
+    color: white;
+}
+
+.show-btn:hover,
+#show_order:hover {
+    background-color: #1b4a9c;
+}
+
 .delete-btn:hover {
     background-color: #c82333;
 }

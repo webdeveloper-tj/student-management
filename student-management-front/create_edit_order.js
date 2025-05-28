@@ -2,6 +2,8 @@ const tbody = document.querySelector("#students-table tbody");
 const cancelButton = document.querySelector(".btn-cancel-farmon");
 const saveButton = document.querySelector(".btn-save-farmon");
 const closeButton = document.querySelector(".close-farmon");
+const showButton = document.getElementsByClassName(".show-btn");
+const orderList = document.querySelector("#orders_list tboby");
 let studentId;
 const fn = async () => {
   const response = await fetch("http://localhost:3000/api/students");
@@ -11,12 +13,16 @@ const fn = async () => {
   setTimeout(() => {
     const rows = document.querySelectorAll("#students-table tbody tr");
     const orders = document.querySelector("#orders");
+    const orders_ = document.querySelector("#orders_");
+    const showButton = document.querySelectorAll(".show-btn");
+    const orderList = document.querySelector("#orders_list tbody");
+
     students.forEach((student) => {
-      rows.forEach((row) => {
-        row.addEventListener("dblclick", async () => {
+      showButton.forEach((element) => {
+        element.addEventListener("click", async () => {
           const response_farmon = await fetch(
-            `http://localhost:3000/api/categorias/farmon/${row.getAttribute(
-              "id"
+            `http://localhost:3000/api/categorias/farmon/${element.getAttribute(
+              "data-id"
             )}`
           );
           const create_farmon = document.createElement("button");
@@ -40,7 +46,8 @@ const fn = async () => {
               document.getElementById("documentModal").style.display = "block";
             };
             orders.innerHTML = "";
-            orders.appendChild(create_farmon);
+            orderList.innerHTML = "";
+            orders_.appendChild(create_farmon);
             throw new Error(
               "Network response was not ok " + response.statusText
             );
@@ -50,7 +57,13 @@ const fn = async () => {
           if (orders.hasChildNodes()) {
             orders.innerHTML = "";
           }
-          orders.append(create_farmon);
+          if (orderList.hasChildNodes()) {
+            orderList.innerHTML = "";
+          }
+          if (orders_.hasChildNodes()) {
+            orders_.innerHTML = "";
+          }
+          orders_.append(create_farmon);
           create_farmon.addEventListener("click", () => {
             const fullName = `${student.first_name} ${student.last_name} ${student.middle_name} `;
             const course = student.course || "N/A";
@@ -66,87 +79,112 @@ const fn = async () => {
             } <td>${course}</td>  <td>${getNameById(group, "groups")}</td>`;
             document.getElementById("documentModal").style.display = "block";
           });
-          farmons.map((farmon) => {
-            const order = document.createElement("div");
-            order.className = "farmon-document";
-            order.innerHTML = `
-        <div class="" style="border:1px solid black; padding:40px; margin:0px auto; width:1240px;" >
-            <img src="./image.png" width="120px" height="112px"
-                style="margin: 0px auto; display: block; border-radius: 50%;" alt="logo">
-                <h1 style="text-align: center;">
-                    ВАЗОРАТИ МАОРИФ ВА ИЛМИ ҶУМҲУРИИ ТОҶИКИСТОН<br>
-                    Донишгоҳи техникии Тоҷикистон ба номи академик М. С. Осими
-                </h1>
-                <h3 style="text-align: center;">ФАРМОИШ</h3>
-                <div style="display: flex; row-gap: 2px; justify-content: center;">
-                    Аз "${farmon.day}"-"${farmon.month}"соли 2025
-                    №-${farmon.number}
-                    ш. Душанбе
-                </div>
 
-                <h1 style="text-align: center;">${farmon.type_farmon}</h1>
-                <p>${farmon.modda}</p>
-                <h1 style="text-align: center;">ФАРМОИШ МЕДИХАМ:</h1>
-                <p>${farmon.order}</p>
-                <table id="full_name_student">
-                    <thead>
-                        <tr>
-                            <td>Ному насаби домишчу</td>
-                            <td>Kypc</td>
-                            <td>Ихтисос</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr id="student_detals">
-                           <td>${student.first_name} ${student.last_name} ${
-              student.middle_name || ""
-            }  <td>${student.course || ""}</td>  <td>${getNameById(
-              student.group_id,
-              "groups"
-            )}
-                        </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p class="indent-first">
-                    Асос: гузориши декани факултет ва пешниҳоди муовини аввали ректор оид ба таълим.
-                </p>
-                <p>
-                    &Tab; 2. Назорати имроиши фармоноль мазкур ба зимман муовини аввал, муовини
-                    ректор онд ба тавлим Мачидзода Т.С. вогузор карда шавал.
-                </p>
-                <p style="display: flex; justify-content: space-between; width: 500px; margin: 0px auto;">
-                    <span>Ректор</span>
-                    <span>
-                        Давлатзода К.К.
-                    </span>
-                </p>
-                </br>
-                </br></br>
-                </br></br>
-                </br>
-                <p>Нусха дуруст аст</p>
-                <p style="display: flex; justify-content: space-between; width: 500px; margin: 0px auto;">
-                    <span>Cардори РК ва KM ___________</span>
-                    <span>
-                        Кодирзода Н.Ҳ
-                    </span>
-                </p>
-               <div style="display:flex; justify-content:end; column-gap:5px;">
-                 <button class="print-farmon no-export">Print</button>
-                 <button class="export-pdf no-export">Export to pdf</button>
-               </div>
-        </div>
+          farmons.map((farmon, index) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+            <tr>
+                <td>${farmon.id}</td>
+                <td>${student.first_name} ${student.last_name}</td>
+                <td>${farmon.type_farmon}</td>
+                <td id="show_order" data-id=${farmon.farmon_id}>Show</td>
+            </tr>
+            `;
 
-        `;
-            orders.appendChild(order);
-            const printBtn = order.querySelector(".print-farmon");
-            const exportBtn = order.querySelector(".export-pdf");
-            printBtn.addEventListener("click", () => {
-              printFarmon(order);
-            });
-            exportBtn.addEventListener("click", () => {
-              exportToPdf(order);
+            orderList.appendChild(tr);
+            const show_order = document.querySelectorAll(
+              "#orders_list tbody tr #show_order"
+            );
+
+            show_order.forEach((showBtn) => {
+              showBtn.addEventListener("click", () => {
+                const farmonId = showBtn.getAttribute("data-id");
+                const farmon = farmons.find((f) => f.farmon_id == farmonId);
+                if (farmon) {
+                  const order = document.createElement("div");
+                  order.className = "farmon-document";
+                  order.innerHTML = `
+               <div class="" style="border:1px solid black; padding:40px; margin:0px auto; width:1240px;" >
+                  <img src="./image.png" width="120px" height="112px"
+                      style="margin: 0px auto; display: block; border-radius: 50%;" alt="logo">
+                      <h1 style="text-align: center;">
+                          ВАЗОРАТИ МАОРИФ ВА ИЛМИ ҶУМҲУРИИ ТОҶИКИСТОН<br>
+                          Донишгоҳи техникии Тоҷикистон ба номи академик М. С. Осими
+                      </h1>
+                      <h3 style="text-align: center;">ФАРМОИШ</h3>
+                      <div style="display: flex; row-gap: 2px; justify-content: center;">
+                          Аз "${farmon.day}"-"${farmon.month}"соли 2025
+                          №-${farmon.number}
+                          ш. Душанбе
+                      </div>
+                      <h1 style="text-align: center;">${farmon.type_farmon}</h1>
+                      <p>${farmon.modda}</p>
+                      <h1 style="text-align: center;">ФАРМОИШ МЕДИХАМ:</h1>
+                      <p>${farmon.order}</p>
+                      <table id="full_name_student">
+                          <thead>
+                              <tr>
+                                  <td>Ному насаби домишчу</td>
+                                  <td>Kypc</td>
+                                  <td>Ихтисос</td>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <tr id="student_detals">
+                                 <td>${student.first_name} ${
+                    student.last_name
+                  } ${student.middle_name || ""}  <td>${
+                    student.course || ""
+                  }</td>  <td>${getNameById(student.group_id, "groups")}
+                              </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                      <p class="indent-first">
+                          Асос: гузориши декани факултет ва пешниҳоди муовини аввали ректор оид ба таълим.
+                      </p>
+                      <p>
+                          &Tab; 2. Назорати имроиши фармоноль мазкур ба зимман муовини аввал, муовини
+                          ректор онд ба тавлим Мачидзода Т.С. вогузор карда шавал.
+                      </p>
+                      <p style="display: flex; justify-content: space-between; width: 500px; margin: 0px auto;">
+                          <span>Ректор</span>
+                          <span>
+                              Давлатзода К.К.
+                          </span>
+                      </p>
+                      </br>
+                      </br></br>
+                      </br></br>
+                      </br>
+                      <p>Нусха дуруст аст</p>
+                      <p style="display: flex; justify-content: space-between; width: 500px; margin: 0px auto;">
+                          <span>Cардори РК ва KM ___________</span>
+                          <span>
+                              Кодирзода Н.Ҳ
+                          </span>
+                      </p>
+                     <div style="display:flex; justify-content:end; column-gap:5px;">
+                       <button class="print-farmon no-export">Print</button>
+                       <button class="export-pdf no-export">Export to pdf</button>
+                     </div>
+              </div>
+            `;
+
+                  // Clear previous orders
+                  orders.innerHTML = "";
+                  orders.appendChild(order);
+
+                  const printBtn = order.querySelector(".print-farmon");
+                  const exportBtn = order.querySelector(".export-pdf");
+                  printBtn.addEventListener("click", () => {
+                    printFarmon(order);
+                  });
+                  exportBtn.addEventListener("click", () => {
+                    exportToPdf(order);
+                  });
+                }
+              });
             });
           });
         });
@@ -154,6 +192,7 @@ const fn = async () => {
     });
   }, 2000);
 };
+
 cancelButton.addEventListener("click", () => {
   document.getElementById("documentModal").style.display = "none";
 });
@@ -256,3 +295,12 @@ async function exportToPdf(element) {
     alert("Failed to export PDF. Please try again.");
   }
 }
+
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Escape") {
+    const show_order_list = document.querySelectorAll("#orders_list");
+    const orders = document.querySelector("#orders");
+    orders.innerHTML = "";
+    show_order_list.style.display = "none";
+  }
+});

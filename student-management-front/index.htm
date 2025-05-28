@@ -48,9 +48,23 @@
             <!-- Data will be inserted here by JavaScript -->
         </tbody>
     </table>
+    <table id="orders_list">
+        <thead>
+            <th>id</th>
+            <th>Student</th>
+            <th>Order type</th>
+            <th>action</th>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div id="orders_"
+        style="display: flex; flex-direction: column; justify-content: center; row-gap: 10px; margin-top: 20px;">
+    </div>
     <div id="orders"
         style="display: flex; flex-direction: column; justify-content: center; row-gap: 10px; margin-top: 20px;">
     </div>
+    
     <div id="editModal" class="modal">
         <div class="modal-content ">
             <span class="close">&times;</span>
@@ -319,14 +333,14 @@
                         id="type_farmon">
                 </div>
                 <br>
-                <textarea rows="8" cols="135" style="padding: 10;" id="modda_type">
+                <textarea rows="8" cols="115" style="padding: 10;" id="modda_type">
                     Мутобиқи қисми 11 моддаи 21 Қонуни Ҷумҳурии Тоҷикистон «Дар бораи таҳсилоти олӣ ва таҳсилоти касбӣ
                     баъд аз муассисаҳои таҳсилоти миёнаи умумӣ», банди 24 Тартиби хориҷ, барқарор ва интиқоли донишҷӯён
                     байни муассисаҳои таҳсилоти олии касбии Ҷумҳурии Тоҷикистон ва банди 88 Оинномаи Донишгоҳи техникии
                     Тоҷикистон ба номи академик М. С. Осимӣ
                 </textarea>
                 <h1 style="text-align: center;">ФАРМОИШ МЕДИХАМ:</h1>
-                <textarea rows="8" cols="135" style="padding: 10;" placeholder="Матни асосӣ" id="order_type">
+                <textarea rows="8" cols="115" style="padding: 10;" placeholder="Матни асосӣ" id="order_type">
                     1. Донишҷӯи зерин аз шуъбаи рӯзонаи таҳсили буҷавии факултети технологияҳои рақамӣ, системаҳо ва
                     ҳифзи иттилоот, бинобар сабаби набудани ҳозиршавии кофӣ аз нимсолаи дуюми соли таҳсили 2024–2025
                     хориҷ карда шавад:

@@ -308,6 +308,9 @@ async function fetchStudents() {
                     <button class="action-btn delete-btn" data-id="${
                       student.id
                     }">Delete</button>
+                     <button class="action-btn show-btn" id="show-btn" data-id="${
+                       student.id
+                     }">Show ordes</button>
                 </td>
             `;
       row.setAttribute("id", student.id);
